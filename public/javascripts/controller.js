@@ -5,7 +5,7 @@ function mainController($scope, $http){
 
   $http.get('/')
     .success(fuction(data){
-      $scope.courses = data;
+      $scope.courses = data + "TEST";
       //console.log(data);
     })
     .error(function(data){

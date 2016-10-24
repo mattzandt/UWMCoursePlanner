@@ -23,6 +23,8 @@ router.get('/', function(req, res, next) {
 
 //GET majors
 
-//
+//GET minors
+
+//GET course requirements
 
 module.exports = router;
