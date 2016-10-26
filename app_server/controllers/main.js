@@ -9,8 +9,11 @@ var config = {
 };
 firebase.initializeApp(config);
 
-module.exports.courses = function(req, res){
+/* GET home page */
+// module.exports exposes the named function index to routes
+module.exports.index = function(req, res){
   firebase.database().ref().child('testCourses').once('value', function(snapshot){
+	// res.render combines the view template file "/views/index.ejs" with the Javascript object to send as HTML response
     res.render('index', {courses : snapshot.val()});
   }, function(err){
       console.log(err);
