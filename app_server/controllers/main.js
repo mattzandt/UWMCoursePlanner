@@ -9,13 +9,33 @@ var config = {
 };
 firebase.initializeApp(config);
 
+var firebaseRef = firebase.database().ref();
+
 /* GET home page */
 // module.exports exposes the named function index to routes
 module.exports.index = function(req, res){
-  firebase.database().ref().child('testCourses').once('value', function(snapshot){
+  firebaseRef.child('testCourses').once('value', function(snapshot){
 	// res.render combines the view template file "/views/index.ejs" with the Javascript object to send as HTML response
     res.render('index', {courses : snapshot.val()});
   }, function(err){
       console.log(err);
+  });
+};
+
+/* GET list of majors */
+module.exports.majors = function(req, res){
+  firebaseRef.child('majors').once('value', function(snapshot){
+    res.json(snapshot.val());
+  }, function(err){
+    console.log(err);
+  });
+};
+
+/* GET list of minors */
+module.exports.minors = function(req, res){
+  firebaseRef.child('minors').once('value', function(snapshot){
+    res.json(snapshot.val());
+  }, function(err){
+    console.log(err);
   });
 };

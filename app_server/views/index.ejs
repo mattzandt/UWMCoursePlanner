@@ -59,10 +59,41 @@
 				</div>
 			</div>
 		</div>
-		
+
+    <div class="modal fade major-minor-modal-md" tabindex="-1" role="dialog" aria-labelledby="myMediumModalLabel">
+      <div class="modal-dialog modal-md">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid">
+              <div class="jumbotron slim-jumbotron">
+                <ul id="major-minor-list"></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
 		<div class="container-fluid">
 			<div class="main-content">
 				<div class="row">
+					<div class="col-xs-12 col-lg-2">
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h3 class="panel-title">Controls</h3>
+						</div>
+						<div class="panel-body">
+							<div class="btn-group-vertical">
+									<a href="#" id="selectMajor"class="btn btn-default">Select major(s)</a>
+									<a href="#" id="selectMinor" class="btn btn-default">Select minor(s)</a>
+									<a href="#" class="btn btn-default disabled">Add course(s)</a>
+							</div>
+						</div>
+					</div>
+					</div>
 					<div class="col-xs-12 col-lg-10">
 						<div class="panel panel-primary">
 							<div class="panel-heading">
@@ -97,7 +128,7 @@
 				</div>
 			</div>
 		</div>
-		
+		</div>
 		<script src='/javascripts/jquery-3.1.1.min.js'></script>
 		<script src='/bootstrap/js/bootstrap.min.js'></script>
 		<script src='/javascripts/vis.min.js'></script>

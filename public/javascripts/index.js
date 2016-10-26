@@ -1,6 +1,6 @@
 $(function(){
 	$('.bs-example-modal-lg').modal('show');
-	
+
 	var nodes = new vis.DataSet([
 		{id: 1, label: 'Node 1'},
 		{id: 2, label: 'Node 2'},
@@ -29,4 +29,32 @@ $(function(){
 
 	// initialize your network!
 	var network = new vis.Network(container, data, options);
+
+	$("#selectMajor").click(function(){
+		$.get('/majors', function(resp){
+			var list = document.getElementById('major-minor-list');
+			for(var key in resp){
+				var element = document.createElement('li');
+				element.innerText = resp[key];
+				list.appendChild(element);
+			}
+		});
+		$('.major-minor-modal-md').modal('show');
+	});
+
+	$("#selectMinor").click(function(){
+		$.get('/minors', function(resp){
+			var list = document.getElementById('major-minor-list');
+			for(var key in resp){
+				var element = document.createElement('li');
+				element.innerText = resp[key];
+				list.appendChild(element);
+			}
+		});
+		$('.major-minor-modal-md').modal('show');
+	});
+
+	$(".major-minor-modal-md").on("hidden.bs.modal", function () {
+    document.getElementById('major-minor-list').innerHTML = '';
+	});
 });
