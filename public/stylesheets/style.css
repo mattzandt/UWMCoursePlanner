@@ -1,1 +1,5 @@
 /* Empty for now, add custom css later */
+.slim-jumbotron {
+	padding-top: 15px;
+	padding-bottom: 15px;
+}

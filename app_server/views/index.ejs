@@ -38,12 +38,23 @@
 				</div>
 			</div>
 		</nav>
-		<div class="container-fluid">
-			<div class="jumbotron">
-				<h1>Welcome to UWM Course Planner</h1>
-				<p>UWM Course Planner is a tool for planning and visualizing a UW-Milwaukee student’s path to graduation.<br/><strong>Take the courses you want, when you need to!</strong></p>
-				<img width="70%" class="img-responsive img-rounded" src="/images/HP_Lucero_Rocha2.jpg"><br/>
-				<p><a class="btn btn-primary btn-lg">Get started</a></p>
+		<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					</div>
+					<div class="modal-body">
+						<div class="container-fluid">
+							<div class="jumbotron slim-jumbotron">
+								<h1>Welcome to UWM Course Planner</h1>
+								<p>UWM Course Planner is a tool for planning and visualizing a UW-Milwaukee student’s path to graduation.<br/><strong>Take the courses you want, when you need to!</strong></p>
+								<img class="img-responsive img-rounded" src="/images/HP_Lucero_Rocha2.jpg"><br/>
+								<p><a class="btn btn-primary btn-lg" data-toggle="modal" data-target=".bs-example-modal-lg">Get started</a></p>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 		
@@ -78,5 +89,6 @@
 		
 		<script src='/javascripts/jquery-3.1.1.min.js'></script>
 		<script src='/bootstrap/js/bootstrap.min.js'></script>
+		<script src='/javascripts/index.js'></script>
   </body>
 </html>
