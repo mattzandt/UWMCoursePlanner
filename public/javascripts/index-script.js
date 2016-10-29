@@ -35,7 +35,10 @@ $(function(){
 		$.get('/majors', function(resp){
 			var list = document.getElementById('major-minor-list');
 			for(var key in resp){
-				var element = document.createElement('li');
+				var element = document.createElement('button');
+				element.setAttribute("class", "btn btn-primary center-block");
+				element.setAttribute("type", "button");
+				element.style.margin = "5px";
 				element.innerText = resp[key];
 				list.appendChild(element);
 			}
@@ -47,7 +50,10 @@ $(function(){
 		$.get('/minors', function(resp){
 			var list = document.getElementById('major-minor-list');
 			for(var key in resp){
-				var element = document.createElement('li');
+				var element = document.createElement('button');
+				element.setAttribute("class", "btn btn-primary center-block");
+				element.setAttribute("type", "button");
+				element.style.margin = "5px";
 				element.innerText = resp[key];
 				list.appendChild(element);
 			}
