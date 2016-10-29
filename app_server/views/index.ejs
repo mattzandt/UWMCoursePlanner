@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="coursePlanner">
   <head>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel='stylesheet' href='/bootstrap/css/readable.bootstrap.css' />
@@ -86,10 +86,11 @@
 							<h3 class="panel-title">Controls</h3>
 						</div>
 						<div class="panel-body">
-							<div class="btn-group-vertical">
-									<a href="#" id="selectMajor"class="btn btn-default">Select major(s)</a>
+							<div ng-controller="mController as controller" class="btn-group-vertical">
+									<a href="#" id="selectMajor" class="btn btn-default">Select major(s)</a>
 									<a href="#" id="selectMinor" class="btn btn-default">Select minor(s)</a>
 									<a href="#" class="btn btn-default disabled">Add course(s)</a>
+									<a ng-click='controller.yell()' href='#' id="selectMajor2" class="btn btn-default">Select major(s) (Ang)</a>
 							</div>
 						</div>
 					</div>
@@ -115,9 +116,11 @@
 			</div>
 		</div>
 		</div>
+		<script src='/javascripts/angular.min.js'></script>
 		<script src='/javascripts/jquery-3.1.1.min.js'></script>
 		<script src='/bootstrap/js/bootstrap.min.js'></script>
 		<script src='/javascripts/vis.min.js'></script>
-		<script src='/javascripts/index.js'></script>
+		<script src='/javascripts/index-script.js'></script>
+		<script src='/javascripts/angular-controller.js'></script>
   </body>
 </html>

@@ -1,5 +1,6 @@
 $(function(){
-	$('.bs-example-modal-lg').modal('show');
+	// TODO: uncomment to show modal intro again (hidden for testing)
+	// $('.bs-example-modal-lg').modal('show');
 
 	var nodes = new vis.DataSet([
 		{id: 1, label: 'Node 1'},
