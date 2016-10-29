@@ -26,10 +26,37 @@ $(function(){
 		nodes: nodes,
 		edges: edges
 	};
-	var options = {};
+
+	var options = {
+		layout: {
+	    randomSeed: undefined,
+	    improvedLayout:true,
+	    hierarchical: {
+	      enabled:true,
+	      levelSeparation: 150,
+	      nodeSpacing: 100,
+	      treeSpacing: 200,
+	      blockShifting: true,
+	      edgeMinimization: true,
+	      parentCentralization: false,
+	      direction: 'LR',        // UD, DU, LR, RL
+	      sortMethod: 'hubsize'   // hubsize, directed
+	    }
+	  }
+	};
 
 	// initialize your network!
 	var network = new vis.Network(container, data, options);
+	var options = {
+
+		physics: {
+			enabled: true,
+			hierarchicalRepulsion: {
+				nodeDistance: 35
+			}
+		}
+	}
+	network.setOptions(options);
 
 	$("#selectMajor").click(function(){
 		$.get('/majors', function(resp){
