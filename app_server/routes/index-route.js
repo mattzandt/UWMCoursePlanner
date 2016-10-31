@@ -11,6 +11,12 @@ router.get('/majors', ctrlMain.majors);
 /* GET list of minors */
 router.get('/minors', ctrlMain.minors);
 
+/* GET list of required courses */
+router.get('/requiredCourses', ctrlMain.requiredCourses);
+
+/* GET list of courses */
+router.get('/courses', ctrlMain.courses);
+
 // POST login
 router.post('/login', ctrlMain.login);
 

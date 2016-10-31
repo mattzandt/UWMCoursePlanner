@@ -40,6 +40,24 @@ module.exports.minors = function(req, res){
   });
 };
 
+/* GET list of required courses */
+module.exports.requiredCourses = function(req, res){
+  firebaseRef.child('requiredCourses').once('value', function(snapshot){
+    res.json(snapshot.val());
+  }, function(err){
+    console.log(err);
+  });
+};
+
+/* GET list of courses */
+module.exports.courses = function(req, res){
+  firebaseRef.child('courses').once('value', function(snapshot){
+    res.json(snapshot.val());
+  }, function(err){
+    console.log(err);
+  });
+};
+
 // POST login
 module.exports.login = function(req, res){
   firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.pass).then(function(){

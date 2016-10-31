@@ -1,0 +1,211 @@
+{
+  "courses" : {
+	"EE354" : {
+      "credits" : 3,
+      "prereq" : {
+        "requirements" : [ "CS250" ],
+        "standing" : ""
+      },
+      "title" : "Digital Logic"
+    },
+	"EAS200" : {
+      "credits" : 1,
+      "prereq" : {
+        "requirements" : [],
+        "standing" : ""
+      },
+      "title" : "Professional Seminar"
+    },
+	"CS595" : {
+      "credits" : 4,
+      "prereq" : {
+        "requirements" : [ "CS361", "CS458", "CS535", "CS537" ],
+        "standing" : "Senior"
+      },
+      "title" : "Capstone Project"
+    },
+	"CS557" : {
+      "credits" : 3,
+      "prereq" : {
+        "requirements" : [ "CS251", "CS315" ],
+        "standing" : "Junior"
+      },
+      "title" : "Introduction to Database Systems"
+    },
+	"CS535" : {
+      "credits" : 3,
+      "prereq" : {
+        "requirements" : [ "CS317", "CS351" ],
+        "standing" : "Junior"
+      },
+      "title" : "Algorithm Design & Analysis"
+    },
+	"CS520" : {
+      "credits" : 3,
+      "prereq" : {
+        "requirements" : [ "CS315" ],
+        "standing" : "Junior"
+      },
+      "title" : "Computer Networks"
+    },
+	"CS458" : {
+      "credits" : 3,
+      "prereq" : {
+        "requirements" : [ "CS315", "EE354" ],
+        "standing" : "Junior"
+      },
+      "title" : "Computer Architecture"
+    },
+	"CS431" : {
+      "credits" : 3,
+      "prereq" : {
+        "requirements" : [ "CS351" ],
+        "standing" : "Junior"
+      },
+      "title" : "Programming Languages Concepts"
+    },
+	"CS417" : {
+      "credits" : 3,
+      "prereq" : {
+        "requirements" : [ "CS317" ],
+        "standing" : "Junior"
+      },
+      "title" : "Introduction to the Theory of Computation"
+    },
+	"CS395" : {
+      "credits" : 3,
+      "prereq" : {
+        "requirements" : [ "" ],
+        "standing" : "Sophomore"
+      },
+      "title" : "Social, Professional & Ethical Issues"
+    },
+	"CS361" : {
+      "credits" : 3,
+      "prereq" : {
+        "requirements" : [ "CS351" ],
+        "standing" : ""
+      },
+      "title" : "Introduction to Software Engineering"
+    },
+	"CS351" : {
+      "credits" : 3,
+      "prereq" : {
+        "requirements" : [ "CS251" ],
+        "standing" : ""
+      },
+      "title" : "Data Structures & Algorithms"
+    },
+	"CS337" : {
+      "credits" : 3,
+      "prereq" : {
+        "requirements" : [ "CS251" ],
+        "standing" : ""
+      },
+      "title" : "Systems Programming"
+    },
+	"CS317" : {
+      "credits" : 3,
+      "prereq" : {
+        "requirements" : [ "CS250" ],
+        "standing" : ""
+      },
+      "title" : "Discrete Information Structures"
+    },
+	"CS315" : {
+      "credits" : 3,
+      "prereq" : {
+        "requirements" : [ "CS250" ],
+        "standing" : ""
+      },
+      "title" : "Introduction to Computer Organization & Assembly Language"
+    },
+	"CS251" : {
+      "credits" : 3,
+      "prereq" : {
+        "requirements" : [ "CS250" ],
+        "standing" : ""
+      },
+      "title" : "Introduction to Operating Systems"
+    },
+	"CS250" : {
+      "credits" : 3,
+      "prereq" : {
+		"requirements" : [],
+        "standing" : ""
+      },
+      "title" : "Introductory Computer Programming"
+    },
+	"CS150" : {
+      "credits" : 3,
+      "prereq" : {
+		"requirements" : [],
+        "standing" : ""
+      },
+      "title" : "Survey of Computer Science"
+    },
+    "CS537" : {
+      "credits" : 3,
+      "prereq" : {
+        "requirements" : [ "CS458", "CS337" ],
+        "standing" : "Junior"
+      },
+      "title" : "Introduction to Operating Systems"
+    },
+    "CS552" : {
+      "credits" : 3,
+      "prereq" : {
+        "requirements" : [ "CS351", "CS361" ],
+        "standing" : "Junior"
+      },
+      "title" : "Advanced Object-Oriented Programming"
+    },
+    "MATH231" : {
+      "credits" : 4,
+      "prereq" : "Placement level: A",
+      "title" : "Calculus and Analytic Geometry I"
+    },
+    "MATH232" : {
+      "credits" : 4,
+      "prereq" : {
+        "requirements" : [ "MATH231" ]
+      },
+      "title" : "Calculus and Analytic Geometry II"
+    }
+  },
+  "majors" : {
+    "CS" : "Computer Science",
+    "EE" : "Electrical Engineering",
+    "ME" : "Mechanical Engineering"
+  },
+  "minors" : {
+    "CS" : "Computer Science",
+    "ENG" : "English",
+    "MATH" : "Mathematics"
+  },
+  "requiredCourses" : {
+    "majors" : {
+      "CS" : {
+        "MathElectives" : {
+          "0" : "*course*",
+          "1" : "*course*",
+          "2" : "...",
+          "credits" : 6
+        },
+        "MathReq" : {
+          "0" : "MATH231",
+          "1" : "MATH232",
+          "credits" : 8
+        },
+        "core" : [ "CS150", "CS250", "CS251", "CS315", "CS317", "CS337", "CS351", "CS361", "CS395", "CS417", "CS431", "CS458", "CS520", "CS535", "CS537", "CS557", "CS595", "EAS200", "EE354" ]
+      },
+      "EE" : "*requirements*",
+      "ME" : "*requirements*"
+    },
+    "minors" : {
+      "CS" : "*requirements*",
+      "ENG" : "*requirements*",
+      "MATH" : "*requirements*"
+    }
+  }
+}

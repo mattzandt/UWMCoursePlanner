@@ -1,6 +1,16 @@
 $(function(){
+	var requiredCoursesObj;
+	var coursesObj;
+	
+	// get all course data from DB
+	$.get('/courses', function(resp){
+		console.log(resp);
+		coursesObj = resp;
+	});
+	
 	// TODO: uncomment to show modal intro again (hidden for testing)
-
+	$('.bs-example-modal-lg').modal('show');
+	
 	var nodes = new vis.DataSet([
 		{id: 1, label: 'Node 1'},
 		{id: 2, label: 'Node 2'},
@@ -27,35 +37,70 @@ $(function(){
 	};
 
 	var options = {
+		edges: {
+			arrows: {
+				to: {
+					enabled: true,
+					scaleFactor: 0.5
+				}
+			}
+		},
+        groups: {
+			useDefaultGroups: false,
+			/*
+            Sophomore: {
+                color: 'green'
+            },
+            Junior: {
+                color: 'yellow'
+            },
+            Senior: {
+				color: 'red'
+			},
+            NoStanding: {
+                color: 'blue'
+            }
+			*/
+        },
 		layout: {
-	    randomSeed: undefined,
-	    improvedLayout:true,
-	    hierarchical: {
-	      enabled:true,
-	      levelSeparation: 150,
-	      nodeSpacing: 100,
-	      treeSpacing: 200,
-	      blockShifting: true,
-	      edgeMinimization: true,
-	      parentCentralization: false,
-	      direction: 'LR',        // UD, DU, LR, RL
-	      sortMethod: 'hubsize'   // hubsize, directed
-	    }
-	  }
+			randomSeed: undefined,
+			improvedLayout:true,
+			hierarchical: {
+				enabled:true,
+				levelSeparation: 250,
+				nodeSpacing: 100,
+				treeSpacing: 200,
+				blockShifting: true,
+				edgeMinimization: true,
+				parentCentralization: false,
+				direction: 'LR',        // UD, DU, LR, RL
+				sortMethod: 'directed'   // hubsize, directed
+			}
+		},
+		/*
+		manipulation: {
+			addNode: function(nodeData,callback) {
+			  nodeData.label = 'hello world';
+			  callback(nodeData);
+			}
+		},
+		*/
+		nodes: {
+			font: {
+			  size: 36, // px
+			},			
+		},
+		physics: {
+			enabled: false,
+			hierarchicalRepulsion: {
+				nodeDistance: 35
+			}
+		}		
 	};
 
 	// initialize your network!
 	var network = new vis.Network(container, data, options);
-	var options = {
-
-		physics: {
-			enabled: true,
-			hierarchicalRepulsion: {
-				nodeDistance: 35
-			}
-		}
-	}
-	network.setOptions(options);
+	//network.setOptions(options);
 
 	// ***MAJOR/MINOR SELECTION**
 	$("#selectMajor").click(function(){
@@ -63,14 +108,72 @@ $(function(){
 			var list = document.getElementById('major-minor-list');
 			for(var key in resp){
 				var element = document.createElement('button');
-				element.setAttribute("class", "btn btn-primary center-block");
+				element.setAttribute("class", "btn btn-primary btn-major center-block");
 				element.setAttribute("type", "button");
 				element.style.margin = "5px";
-				element.innerText = resp[key];
+				element.innerText = key + ': ' + resp[key];
 				list.appendChild(element);
 			}
 		});
 		$('.major-minor-modal-md').modal('show');
+	});
+	
+	// ***MAJOR BUTTONS***
+	$(document).on('click', '.btn-major', function(){
+		console.log($(this).html());
+		// match major key in button name
+		var re = /(\w+):/
+		var re_result = re.exec($(this).html());
+		if (re_result != null) {
+			var key = re_result[1];
+			console.log('key: ' + key);
+			// get major data from DB
+			$.get('/requiredCourses', function(resp){
+				console.log(resp['majors'][key]);
+				requiredCoursesObj = resp['majors'][key];
+				// construct nodes for core courses
+				var nodeArray = [];
+				var edgeArray = [];
+				console.log(requiredCoursesObj.core);
+				console.log(coursesObj);
+				requiredCoursesObj.core.forEach(function(item, index, array) {
+					console.log(item);
+					//nodeArray.push({id: item, label: item});
+					console.log(coursesObj[item]);
+					
+					if (typeof coursesObj[item].prereq.standing != 'undefined') {
+						var standing = coursesObj[item].prereq.standing;
+						var courseTitle = coursesObj[item].title;
+						var courseCredits = coursesObj[item].credits;
+						console.log(standing);
+						nodeArray.push({id: item, label: item, group: standing, title: '<b>Title:</b> ' + courseTitle + '<br/><b>Credits:</b> ' + courseCredits});
+					}
+					else {
+						nodeArray.push({id: item, label: item, group: 'NoStanding', title: '<b>Title:</b> ' + courseTitle + '<br/><b>Credits:</b> ' + courseCredits});
+					}
+					
+					// create array of edges from pre-req data
+					console.log(coursesObj[item].prereq.requirements);
+					
+					
+					
+					if (typeof coursesObj[item].prereq.requirements != 'undefined') {
+						coursesObj[item].prereq.requirements.forEach(function(item2, index2, array2) {
+							edgeArray.push({from: item2, to: item});
+						});
+					}
+				});
+				// initialize network parameters and network
+				nodes = new vis.DataSet(nodeArray);
+				edges = new vis.DataSet(edgeArray);
+				data = {
+					nodes: nodes,
+					edges: edges
+				};
+				network.setData(data);
+			});
+		}
+		$('.major-minor-modal-md').modal('hide');
 	});
 
 	$("#selectMinor").click(function(){
