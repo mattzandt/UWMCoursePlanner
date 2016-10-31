@@ -63,7 +63,6 @@ module.exports.register = function(req, res){
   firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.pass).then(function() {
     res.sendStatus(200);
   }, function(error){
-    console.log(req.body.email + ' ' + req.body.pass)
     res.send(error.message);
   });
 }
