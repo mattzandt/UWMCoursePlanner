@@ -39,3 +39,31 @@ module.exports.minors = function(req, res){
     console.log(err);
   });
 };
+
+// POST login
+module.exports.login = function(req, res){
+  firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.pass).then(function(){
+    res.sendStatus(200);
+  }, function(error){
+    res.send(error.message);
+  });
+}
+
+//POST logout
+module.exports.logout = function(req, res){
+  firebase.auth().signOut().then(function() {
+    res.sendStatus(200);
+  }, function(error){
+    res.sendStatus(500);
+  });
+}
+
+//POST register
+module.exports.register = function(req, res){
+  firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.pass).then(function() {
+    res.sendStatus(200);
+  }, function(error){
+    console.log(req.body.email + ' ' + req.body.pass)
+    res.send(error.message);
+  });
+}

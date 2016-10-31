@@ -11,4 +11,13 @@ router.get('/majors', ctrlMain.majors);
 /* GET list of minors */
 router.get('/minors', ctrlMain.minors);
 
+// POST login
+router.post('/login', ctrlMain.login);
+
+//POST logout
+router.post('/logout', ctrlMain.logout);
+
+//POST register
+router.post('/register', ctrlMain.register);
+
 module.exports = router; // expose router constructor?

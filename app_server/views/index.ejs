@@ -35,7 +35,8 @@
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
 						<li><a href="#">Help</a></li>
-						<li><a href="#">Sign In</a></li>
+						<li><a href="#" id="loginBtn" data-toggle="modal" data-target="#login-modal">Login</a></li>
+            <li><a href="#" id="logoutBtn" style="display: none;">Logout</a></li>
 					</ul>
 				</div>
 			</div>
@@ -72,6 +73,64 @@
                 <div id="major-minor-list" class="btn-group-vertical center-block"></div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade login-modal" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          </div>
+        		<div class="loginmodal-container">
+        			<h1>Login to Your Account</h1><br>
+              <h5 id="loginFailed" style="display:none;">Login failed!</h5><br>
+        			<form>
+        				<input id="loginEmail" type="text" name="email" placeholder="Email">
+        				<input id="loginPass" type="password" name="pass" placeholder="Password">
+        				<input id="submitLogin" type="submit" name="login" class="login loginmodal-submit" value="Login">
+        		  </form>
+        			<div class="login-help">
+        			  <a id="regBtn" href="#" data-toggle="modal" data-target=".register-modal">Register</a>
+        			</div>
+        		</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade logout-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          </div>
+            <div class="container-fluid">
+              <h1 class="text-center">Logout failed!</h1><br>
+              <a class="btn btn-primary btn-lg center-block" data-toggle="modal" data-target=".logout-modal">Ok</a>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade register-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          </div>
+          <div class="loginmodal-container">
+            <h1>Register Account</h1><br>
+            <h5 id="passMismatch" style="display: none;">Passwords do not match</h5><br>
+            <h5 id="regSuccess" style="display: none;"></h5><br>
+            <h5 id="regFail" style="display: none;"></h5><br>
+            <form>
+              <input id="regEmail" type="text" name="email" placeholder="Email">
+              <input id="regPass" type="password" name="pass" placeholder="Password">
+              <input id="regPassAgain" type="password" name="pass" placeholder="Retype Password">
+              <input id="submitReg" type="submit" class="login loginmodal-submit" value="Submit">
+            </form>
           </div>
         </div>
       </div>

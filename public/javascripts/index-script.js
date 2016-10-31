@@ -1,6 +1,5 @@
 $(function(){
 	// TODO: uncomment to show modal intro again (hidden for testing)
-	// $('.bs-example-modal-lg').modal('show');
 
 	var nodes = new vis.DataSet([
 		{id: 1, label: 'Node 1'},
@@ -58,6 +57,7 @@ $(function(){
 	}
 	network.setOptions(options);
 
+	// ***MAJOR/MINOR SELECTION**
 	$("#selectMajor").click(function(){
 		$.get('/majors', function(resp){
 			var list = document.getElementById('major-minor-list');
@@ -90,5 +90,74 @@ $(function(){
 
 	$(".major-minor-modal-md").on("hidden.bs.modal", function () {
     document.getElementById('major-minor-list').innerHTML = '';
+	});
+
+	// ***LOGIN/LOGOUT***
+	$('#submitLogin').click(function(){
+		$.post('/login', { email: document.getElementById('loginEmail').value, pass: document.getElementById('loginPass').value }, function(resp){
+			if (resp == 'OK') {
+				document.getElementById('loginFailed').setAttribute('style', 'display: none;');
+				$('.login-modal').modal('hide');
+				document.getElementById('loginBtn').setAttribute('style', 'display: none;');
+				document.getElementById('logoutBtn').setAttribute('style', '');
+			} else {
+				document.getElementById('loginFailed').innerText = resp;
+				document.getElementById('loginFailed').setAttribute('style', 'color: red;');
+			}
+		});
+	});
+
+	$(".login-modal").on("hidden.bs.modal", function(){
+		document.getElementById('loginFailed').setAttribute('style', 'display: none;');
+		document.getElementById('loginEmail').value = '';
+		document.getElementById('loginPass').value = '';
+	});
+
+	$('#logoutBtn').click(function(){
+		$.post('/logout', function(resp){
+			if(resp == 'OK'){
+				document.getElementById('logoutBtn').setAttribute('style', 'display: none;');
+				document.getElementById('loginBtn').setAttribute('style', '');
+			} else {
+				$('.logout-modal').modal('show');
+			}
+		});
+	});
+
+	$(".register-modal").on("hidden.bs.modal", function(){
+		document.getElementById('passMismatch').setAttribute('style', 'display: none;');
+		document.getElementById('regSuccess').setAttribute('style', 'display: none;');
+		document.getElementById('regFail').setAttribute('style', 'display: none;');
+	});
+
+	$('#regBtn').click(function(){
+		$('.login-modal').modal('hide');
+		document.getElementById('regEmail').value = '';
+		document.getElementById('regPass').value = '';
+		document.getElementById('regPassAgain').value = '';
+	});
+
+	$('#submitReg').click(function(){
+		if(document.getElementById('regPass').value !== document.getElementById('regPassAgain').value){
+			document.getElementById('regSuccess').setAttribute('style', 'display: none;');
+			document.getElementById('regFail').setAttribute('style', 'display: none;');
+			document.getElementById('passMismatch').setAttribute('style', "color: red;")
+		}else{
+			var userEmail = document.getElementById('regEmail').value;
+			var userPass = document.getElementById('regPass').value;
+			$.post('/register', {email: userEmail, pass: userPass}, function(resp){
+				if(resp == 'OK'){
+					document.getElementById('regFail').setAttribute('style', 'display: none;');
+					document.getElementById('passMismatch').setAttribute('style', 'display: none;');
+					document.getElementById('regSuccess').innerText = 'Registration successful!';
+					document.getElementById('regSuccess').setAttribute('style', 'color: blue;');
+				} else{
+					document.getElementById('passMismatch').setAttribute('style', 'display: none;');
+					document.getElementById('regSuccess').setAttribute('style', 'display: none;');
+					document.getElementById('regFail').innerText = resp;
+					document.getElementById('regFail').setAttribute('style', 'color: red;')
+				}
+			});
+		}
 	});
 });
