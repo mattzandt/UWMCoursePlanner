@@ -67,7 +67,7 @@ $(function(){
 			improvedLayout:true,
 			hierarchical: {
 				enabled:true,
-				levelSeparation: 400,
+				levelSeparation: 420,
 				nodeSpacing: 100,
 				treeSpacing: 200,
 				blockShifting: true,
