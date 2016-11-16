@@ -84,3 +84,19 @@ module.exports.register = function(req, res){
     res.send(error.message);
   });
 }
+
+module.exports.savePlan = function(req, res){
+  var plansRef = firebaseRef.child("savedPlans");
+  var uid = firebase.auth().currentUser.uid;
+  if (uid != null){
+    console.log('Saving plan named ' + req.body.planName + ' for ' + uid + '...');
+    plansRef.child(uid).child(req.body.planName).update({
+      'nodes' : req.body.nodes,
+      'edges' : req.body.edges
+    });
+    res.sendStatus(200);
+  }else {
+    console.log('failed to get current user');
+    res.sendStatus(500);
+  }
+}

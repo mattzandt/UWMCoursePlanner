@@ -1,16 +1,17 @@
 $(function(){
 	var requiredCoursesObj;
 	var coursesObj;
-	
+	var loggedIn = false;
+
 	// get all course data from DB
 	$.get('/courses', function(resp){
 		console.log(resp);
 		coursesObj = resp;
 	});
-	
+
 	// TODO: uncomment to show modal intro again (hidden for testing)
 	$('.bs-example-modal-lg').modal('show');
-	
+
 	var nodes = new vis.DataSet([
 		{id: 1, label: 'Node 1'},
 		{id: 2, label: 'Node 2'},
@@ -88,14 +89,14 @@ $(function(){
 		nodes: {
 			font: {
 			  size: 36, // px
-			},			
+			},
 		},
 		physics: {
 			enabled: false,
 			hierarchicalRepulsion: {
 				nodeDistance: 35
 			}
-		}		
+		}
 	};
 
 	// initialize your network!
@@ -117,7 +118,7 @@ $(function(){
 		});
 		$('.major-minor-modal-md').modal('show');
 	});
-	
+
 	// ***MAJOR BUTTONS***
 	$(document).on('click', '.btn-major', function(){
 		console.log($(this).html());
@@ -140,7 +141,7 @@ $(function(){
 					console.log(item);
 					//nodeArray.push({id: item, label: item});
 					console.log(coursesObj[item]);
-					
+
 					if (typeof coursesObj[item].prereq.standing != 'undefined') {
 						var standing = coursesObj[item].prereq.standing;
 						var courseTitle = coursesObj[item].title;
@@ -151,12 +152,12 @@ $(function(){
 					else {
 						nodeArray.push({id: item, label: item, group: 'NoStanding', title: '<b>Title:</b> ' + courseTitle + '<br/><b>Credits:</b> ' + courseCredits});
 					}
-					
+
 					// create array of edges from pre-req data
 					console.log(coursesObj[item].prereq.requirements);
-					
-					
-					
+
+
+
 					if (typeof coursesObj[item].prereq.requirements != 'undefined') {
 						coursesObj[item].prereq.requirements.forEach(function(item2, index2, array2) {
 							edgeArray.push({from: item2, to: item});
@@ -195,6 +196,27 @@ $(function(){
     document.getElementById('major-minor-list').innerHTML = '';
 	});
 
+	// ***SAVE PLAN***
+	$('#saveBtn').click(function(){
+		if(loggedIn == true){
+			$.post('/savePlan', {planName : 'test', nodes: JSON.stringify(nodes), edges: JSON.stringify(edges)}, function(resp){
+				if (resp == 'OK'){
+					$("#successSave").alert();
+					$("#successSave").fadeTo(2000, 500).slideUp(500, function(){
+						$("#successSave").slideUp(500);
+					});
+					console.log('successful save');
+				}else {
+					console.log('failed save');
+					$("#failSave").alert();
+					$("#failSave").fadeTo(2000, 500).slideUp(500, function(){
+						$("#failSave").slideUp(500);
+					});
+				}
+			});
+		}else $('.login-modal').modal('show');
+	});
+
 	// ***LOGIN/LOGOUT***
 	$('#submitLogin').click(function(){
 		$.post('/login', { email: document.getElementById('loginEmail').value, pass: document.getElementById('loginPass').value }, function(resp){
@@ -203,6 +225,7 @@ $(function(){
 				$('.login-modal').modal('hide');
 				document.getElementById('loginBtn').setAttribute('style', 'display: none;');
 				document.getElementById('logoutBtn').setAttribute('style', '');
+				loggedIn = true;
 			} else {
 				document.getElementById('loginFailed').innerText = resp;
 				document.getElementById('loginFailed').setAttribute('style', 'color: red;');
@@ -221,6 +244,7 @@ $(function(){
 			if(resp == 'OK'){
 				document.getElementById('logoutBtn').setAttribute('style', 'display: none;');
 				document.getElementById('loginBtn').setAttribute('style', '');
+				loggedIn = false;
 			} else {
 				$('.logout-modal').modal('show');
 			}

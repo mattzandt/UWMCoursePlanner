@@ -27,7 +27,7 @@
 							<ul class="dropdown-menu" role="menu">
 								<li><a href="#">New plan...</a></li>
 								<li><a href="#">Open plan...</a></li>
-								<li><a href="#">Save plan...</a></li>
+								<li><a id="saveBtn" href="#">Save plan...</a></li>
 								<li class="divider"></li>
 								<li><a href="#">Export plan...</a></li>
 							</ul>
@@ -41,6 +41,16 @@
 				</div>
 			</div>
 		</nav>
+    <div class="alert alert-success" id="successSave">
+        <button type="button" class="close" data-dismiss="alert">x</button>
+        <strong>Success! </strong>
+        Plan has been successfully saved.
+    </div>
+    <div class="alert alert-danger" id="failSave">
+        <button type="button" class="close" data-dismiss="alert">x</button>
+        <strong>Failure! </strong>
+        Something went wrong while trying to save plan.
+    </div>
 		<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
@@ -181,5 +191,9 @@
 		<script src='/javascripts/vis.min.js'></script>
 		<script src='/javascripts/index-script.js'></script>
 		<script src='/javascripts/angular-controller.js'></script>
+    <script>
+      $('#successSave').hide();
+      $('#failSave').hide();
+    </script>
   </body>
 </html>
