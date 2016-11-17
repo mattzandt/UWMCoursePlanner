@@ -94,6 +94,17 @@ module.exports.savePlan = function(req, res){
       'nodes' : req.body.nodes,
       'edges' : req.body.edges
     });
+    var exists = false;
+    plansRef.child(uid).child('planNames').once('value', function(snapshot){
+      snapshot.forEach(function (snap){
+        if (snap.val() == req.body.planName) {
+          exists = true;
+        }
+      });
+      if (exists == false) {
+        plansRef.child(uid).child('planNames').push(req.body.planName);
+      }
+    });
     res.sendStatus(200);
   }else {
     console.log('failed to get current user');
