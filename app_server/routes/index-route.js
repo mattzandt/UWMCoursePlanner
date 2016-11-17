@@ -29,4 +29,7 @@ router.post('/register', ctrlMain.register);
 //POST save plan
 router.post('/savePlan', ctrlMain.savePlan);
 
+//GET list of saved plan
+router.get('/course')
+
 module.exports = router; // expose router constructor?

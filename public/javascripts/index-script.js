@@ -199,7 +199,16 @@ $(function(){
 	// ***SAVE PLAN***
 	$('#saveBtn').click(function(){
 		if(loggedIn == true){
-			$.post('/savePlan', {planName : 'test', nodes: JSON.stringify(nodes), edges: JSON.stringify(edges)}, function(resp){
+			$('.savePlan-modal').modal('show');
+		}else $('.login-modal').modal('show');
+	});
+
+	$('#submitPlanName').click(function(){
+		if(document.getElementById('planNameInput').value == ''){
+			document.getElementById('emptySave').setAttribute('style', '');
+		}else{
+			$('.savePlan-modal').modal('hide');
+			$.post('/savePlan', {planName : document.getElementById('planNameInput').value, nodes: JSON.stringify(nodes), edges: JSON.stringify(edges)}, function(resp){
 				if (resp == 'OK'){
 					$("#successSave").alert();
 					$("#successSave").fadeTo(2000, 500).slideUp(500, function(){
@@ -214,7 +223,12 @@ $(function(){
 					});
 				}
 			});
-		}else $('.login-modal').modal('show');
+		}
+	});
+
+	$(".savePlan-modal").on("hidden.bs.modal", function(){
+		document.getElementById('emptySave').setAttribute('style', 'display: none;');
+		document.getElementById('planNameInput').value = '';
 	});
 
 	// ***LOGIN/LOGOUT***
