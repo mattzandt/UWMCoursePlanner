@@ -1,13 +1,14 @@
 $(function(){
 	var requiredCoursesObj;
 	var coursesObj;
-	
+	var loggedIn = false;
+
 	// get all course data from DB
 	$.get('/courses', function(resp){
 		console.log(resp);
 		coursesObj = resp;
 	});
-	
+
 	// TODO: uncomment to show modal intro again (hidden for testing)
 	// $('.bs-example-modal-lg').modal('show');
 	
@@ -97,19 +98,55 @@ $(function(){
 		nodes: {
 			font: {
 			  size: 36, // px
-			},			
+			},
 		},
 		physics: {
 			enabled: false,
 			hierarchicalRepulsion: {
 				nodeDistance: 35
 			}
-		}		
+		}
 	};
 
 	// initialize your network!
 	var network = new vis.Network(container, data, options);
 	//network.setOptions(options);
+
+	// ** LOAD PLAN **
+	$(".loadPlan-modal-md").on("hidden.bs.modal", function () {
+		document.getElementById('loadPlan-list').innerHTML = '';
+		document.getElementById('noPlans').setAttribute('style', 'display:none;');
+	});
+
+	// ** LOAD PLAN SELECTION
+	$("#loadBtn").click(function(){
+		$.get('/planNames', function(data, textStatus, jqXHR){
+			if (textStatus == 'nocontent'){ document.getElementById('noPlans').setAttribute('style', 'color: red;'); }
+			else{
+				var list = document.getElementById('loadPlan-list');
+				for(var key in data){
+					var element = document.createElement('button');
+					element.setAttribute("class", "btn btn-primary btn-major center-block");
+					element.setAttribute("type", "button");
+					element.style.margin = "5px";
+					element.id = key;
+					element.innerText = data[key];
+					element.addEventListener('click', function(){
+						$.get('/getPlan', {planName : this.innerText}, function(data, textStatus, jqXHR){
+							var loadedData = {
+								nodes : $.map($.parseJSON(data.nodes)._data, function(el) { return el }),
+								edges : $.map($.parseJSON(data.edges)._data, function(el) { return el })
+							}
+							network = new vis.Network(container, loadedData, options);
+							$(".loadPlan-modal-md").modal('hide');
+						});
+					});
+					list.appendChild(element);
+				}
+			}
+		});
+		$('.loadPlan-modal-md').modal('show');
+	});
 
 	// ***MAJOR/MINOR SELECTION**
 	$("#selectMajor").click(function(){
@@ -126,7 +163,7 @@ $(function(){
 		});
 		$('.major-minor-modal-md').modal('show');
 	});
-	
+
 	// ***MAJOR BUTTONS***
 	$(document).on('click', '.btn-major', function(){
 		console.log($(this).html());
@@ -149,7 +186,7 @@ $(function(){
 					console.log(item);
 					//nodeArray.push({id: item, label: item});
 					console.log(coursesObj[item]);
-					
+
 					if (typeof coursesObj[item].prereq.standing != 'undefined') {
 						var standing = coursesObj[item].prereq.standing;
 						var courseTitle = coursesObj[item].title;
@@ -160,12 +197,12 @@ $(function(){
 					else {
 						nodeArray.push({id: item, label: item, group: 'NoStanding', title: '<b>Title:</b> ' + courseTitle + '<br/><b>Credits:</b> ' + courseCredits});
 					}
-					
+
 					// create array of edges from pre-req data
 					console.log(coursesObj[item].prereq.requirements);
-					
-					
-					
+
+
+
 					if (typeof coursesObj[item].prereq.requirements != 'undefined') {
 						coursesObj[item].prereq.requirements.forEach(function(item2, index2, array2) {
 							edgeArray.push({from: item2, to: item});
@@ -204,6 +241,41 @@ $(function(){
     document.getElementById('major-minor-list').innerHTML = '';
 	});
 
+	// ***SAVE PLAN***
+	$('#saveBtn').click(function(){
+		if(loggedIn == true){
+			$('.savePlan-modal').modal('show');
+		}else $('.login-modal').modal('show');
+	});
+
+	$('#submitPlanName').click(function(){
+		if(document.getElementById('planNameInput').value == ''){
+			document.getElementById('emptySave').setAttribute('style', '');
+		}else{
+			$('.savePlan-modal').modal('hide');
+			$.post('/savePlan', {planName : document.getElementById('planNameInput').value, nodes: JSON.stringify(nodes), edges: JSON.stringify(edges)}, function(resp){
+				if (resp == 'OK'){
+					$("#successSave").alert();
+					$("#successSave").fadeTo(2000, 500).slideUp(500, function(){
+						$("#successSave").slideUp(500);
+					});
+					console.log('successful save');
+				}else {
+					console.log('failed save');
+					$("#failSave").alert();
+					$("#failSave").fadeTo(2000, 500).slideUp(500, function(){
+						$("#failSave").slideUp(500);
+					});
+				}
+			});
+		}
+	});
+
+	$(".savePlan-modal").on("hidden.bs.modal", function(){
+		document.getElementById('emptySave').setAttribute('style', 'display: none;');
+		document.getElementById('planNameInput').value = '';
+	});
+
 	// ***LOGIN/LOGOUT***
 	$('#submitLogin').click(function(){
 		$.post('/login', { email: document.getElementById('loginEmail').value, pass: document.getElementById('loginPass').value }, function(resp){
@@ -212,6 +284,7 @@ $(function(){
 				$('.login-modal').modal('hide');
 				document.getElementById('loginBtn').setAttribute('style', 'display: none;');
 				document.getElementById('logoutBtn').setAttribute('style', '');
+				loggedIn = true;
 			} else {
 				document.getElementById('loginFailed').innerText = resp;
 				document.getElementById('loginFailed').setAttribute('style', 'color: red;');
@@ -230,6 +303,7 @@ $(function(){
 			if(resp == 'OK'){
 				document.getElementById('logoutBtn').setAttribute('style', 'display: none;');
 				document.getElementById('loginBtn').setAttribute('style', '');
+				loggedIn = false;
 			} else {
 				$('.logout-modal').modal('show');
 			}

@@ -26,8 +26,8 @@
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">File <span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
 								<li><a href="#">New plan...</a></li>
-								<li><a href="#">Open plan...</a></li>
-								<li><a href="#">Save plan...</a></li>
+								<li><a id="loadBtn" href="#">Open plan...</a></li>
+								<li><a id="saveBtn" href="#">Save plan...</a></li>
 								<li class="divider"></li>
 								<li><a href="#">Export plan...</a></li>
 							</ul>
@@ -41,6 +41,16 @@
 				</div>
 			</div>
 		</nav>
+    <div class="alert alert-success" id="successSave">
+        <button type="button" class="close" data-dismiss="alert">x</button>
+        <strong>Success! </strong>
+        Plan has been successfully saved.
+    </div>
+    <div class="alert alert-danger" id="failSave">
+        <button type="button" class="close" data-dismiss="alert">x</button>
+        <strong>Failure! </strong>
+        Something went wrong while trying to save plan.
+    </div>
 		<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
@@ -78,6 +88,25 @@
       </div>
     </div>
 
+    <!-- load plan modal -->
+    <div class="modal fade loadPlan-modal-md" tabindex="-1" role="dialog" aria-labelledby="myMediumModalLabel">
+      <div class="modal-dialog modal-md">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid">
+              <div class="jumbotron slim-jumbotron">
+                <h5 id="noPlans" class="text-center" style="display: none;">You haven't saved any plans!</h1>
+                <div id="loadPlan-list" class="btn-group-vertical center-block"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="modal fade login-modal" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -96,6 +125,24 @@
         			  <a id="regBtn" href="#" data-toggle="modal" data-target=".register-modal">Register</a>
         			</div>
         		</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade savePlan-modal" id="savePlan-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          </div>
+            <div class="loginmodal-container">
+              <h1>Enter a name for your plan:</h1><br>
+              <h5 id="emptySave" style="display:none;">Name cannot be empty!</h5><br>
+              <form>
+                <input id="planNameInput" type="text" placeholder="Plan Name">
+                <input id="submitPlanName" type="submit" class="savePlan savePlan-submit" value="Save">
+              </form>
+            </div>
         </div>
       </div>
     </div>
@@ -181,5 +228,9 @@
 		<script src='/javascripts/vis.min.js'></script>
 		<script src='/javascripts/index-script.js'></script>
 		<script src='/javascripts/angular-controller.js'></script>
+    <script>
+      $('#successSave').hide();
+      $('#failSave').hide();
+    </script>
   </body>
 </html>

@@ -84,3 +84,65 @@ module.exports.register = function(req, res){
     res.send(error.message);
   });
 }
+
+//POST save a plan
+module.exports.savePlan = function(req, res){
+  var plansRef = firebaseRef.child("savedPlans");
+  var uid = firebase.auth().currentUser.uid;
+  if (uid != null){
+    console.log('Saving plan named ' + req.body.planName + ' for ' + uid + '...');
+    plansRef.child(uid).child(req.body.planName).update({
+      'nodes' : req.body.nodes,
+      'edges' : req.body.edges
+    });
+    var exists = false;
+    plansRef.child(uid).child('planNames').once('value', function(snapshot){
+      snapshot.forEach(function (snap){
+        if (snap.val() == req.body.planName) {
+          exists = true;
+        }
+      });
+      if (exists == false) {
+        plansRef.child(uid).child('planNames').push(req.body.planName);
+      }
+    });
+    res.sendStatus(200);
+  }else {
+    console.log('failed to get current user');
+    res.sendStatus(500);
+  }
+}
+
+// GET retrieve list of plans from database
+module.exports.planNames = function(req, res){
+  var uid = firebase.auth().currentUser.uid;
+  var plansRef = firebaseRef.child('savedPlans');
+  plansRef.once('value', function(snap){
+    if(!(snap.hasChild(uid)) || !(snap.child(uid).hasChild('planNames'))){
+      res.sendStatus(204);
+    }else{
+      if (uid != null){
+        var planNames = [];
+        plansRef.child(uid).child('planNames').once('value', function(snapshot){
+          res.json(snapshot.val());
+        });
+      }
+    }
+  });
+}
+
+//GET plan
+module.exports.getPlan = function(req, res){
+  var uid = firebase.auth().currentUser.uid;
+  var plansRef = firebaseRef.child('savedPlans');
+  console.log(req.query.planName);
+  plansRef.once('value', function(snap){
+    if(!(snap.hasChild(uid)) || !(snap.child(uid).child(req.query.planName))){
+      res.sendStatus(204);
+    }else{
+      plansRef.child(uid).child(req.query.planName).once('value', function(snap){
+        res.json(snap.val());
+      });
+    }
+  });
+}

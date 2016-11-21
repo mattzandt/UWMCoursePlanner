@@ -26,4 +26,13 @@ router.post('/logout', ctrlMain.logout);
 //POST register
 router.post('/register', ctrlMain.register);
 
+//POST save plan
+router.post('/savePlan', ctrlMain.savePlan);
+
+//GET list of saved plan
+router.get('/planNames', ctrlMain.planNames);
+
+//GET plan
+router.get('/getPlan', ctrlMain.getPlan);
+
 module.exports = router; // expose router constructor?
