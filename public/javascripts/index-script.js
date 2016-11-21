@@ -103,6 +103,42 @@ $(function(){
 	var network = new vis.Network(container, data, options);
 	//network.setOptions(options);
 
+	// ** LOAD PLAN **
+	$(".loadPlan-modal-md").on("hidden.bs.modal", function () {
+		document.getElementById('loadPlan-list').innerHTML = '';
+		document.getElementById('noPlans').setAttribute('style', 'display:none;');
+	});
+
+	// ** LOAD PLAN SELECTION
+	$("#loadBtn").click(function(){
+		$.get('/planNames', function(data, textStatus, jqXHR){
+			if (textStatus == 'nocontent'){ document.getElementById('noPlans').setAttribute('style', 'color: red;'); }
+			else{
+				var list = document.getElementById('loadPlan-list');
+				for(var key in data){
+					var element = document.createElement('button');
+					element.setAttribute("class", "btn btn-primary btn-major center-block");
+					element.setAttribute("type", "button");
+					element.style.margin = "5px";
+					element.id = key;
+					element.innerText = data[key];
+					element.addEventListener('click', function(){
+						$.get('/getPlan', {planName : this.innerText}, function(data, textStatus, jqXHR){
+							var loadedData = {
+								nodes : $.map($.parseJSON(data.nodes)._data, function(el) { return el }),
+								edges : $.map($.parseJSON(data.edges)._data, function(el) { return el })
+							}
+							network = new vis.Network(container, loadedData, options);
+							$(".loadPlan-modal-md").modal('hide');
+						});
+					});
+					list.appendChild(element);
+				}
+			}
+		});
+		$('.loadPlan-modal-md').modal('show');
+	});
+
 	// ***MAJOR/MINOR SELECTION**
 	$("#selectMajor").click(function(){
 		$.get('/majors', function(resp){

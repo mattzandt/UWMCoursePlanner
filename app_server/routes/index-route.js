@@ -30,5 +30,9 @@ router.post('/register', ctrlMain.register);
 router.post('/savePlan', ctrlMain.savePlan);
 
 //GET list of saved plan
+router.get('/planNames', ctrlMain.planNames);
+
+//GET plan
+router.get('/getPlan', ctrlMain.getPlan);
 
 module.exports = router; // expose router constructor?

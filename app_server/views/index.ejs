@@ -26,7 +26,7 @@
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">File <span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
 								<li><a href="#">New plan...</a></li>
-								<li><a href="#">Open plan...</a></li>
+								<li><a id="loadBtn" href="#">Open plan...</a></li>
 								<li><a id="saveBtn" href="#">Save plan...</a></li>
 								<li class="divider"></li>
 								<li><a href="#">Export plan...</a></li>
@@ -81,6 +81,25 @@
             <div class="container-fluid">
               <div class="jumbotron slim-jumbotron">
                 <div id="major-minor-list" class="btn-group-vertical center-block"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- load plan modal -->
+    <div class="modal fade loadPlan-modal-md" tabindex="-1" role="dialog" aria-labelledby="myMediumModalLabel">
+      <div class="modal-dialog modal-md">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid">
+              <div class="jumbotron slim-jumbotron">
+                <h5 id="noPlans" class="text-center" style="display: none;">You haven't saved any plans!</h1>
+                <div id="loadPlan-list" class="btn-group-vertical center-block"></div>
               </div>
             </div>
           </div>
