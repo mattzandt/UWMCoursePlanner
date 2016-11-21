@@ -9,14 +9,14 @@ $(function(){
 	});
 	
 	// TODO: uncomment to show modal intro again (hidden for testing)
-	$('.bs-example-modal-lg').modal('show');
+	// $('.bs-example-modal-lg').modal('show');
 	
 	var nodes = new vis.DataSet([
-		{id: 1, label: 'Node 1'},
-		{id: 2, label: 'Node 2'},
-		{id: 3, label: 'Node 3'},
-		{id: 4, label: 'Node 4'},
-		{id: 5, label: 'Node 5'}
+		{id: 1, label: 'Node 1', level: 1},
+		{id: 2, label: 'Node 2', level: 2},
+		{id: 3, label: 'Node 3', level: 3},
+		{id: 4, label: 'Node 4', level: 4},
+		{id: 5, label: 'Node 5', level: 4}
 	]);
 
 	// create an array with edges
@@ -77,14 +77,23 @@ $(function(){
 				sortMethod: 'directed'   // hubsize, directed
 			}
 		},
-		/*
 		manipulation: {
+			enabled: true,
 			addNode: function(nodeData,callback) {
 			  nodeData.label = 'hello world';
 			  callback(nodeData);
+			},
+			editNode: function(nodeData,callback) {
+				var level = prompt("Current node level is " + nodeData.level + ". Enter a new level: ", nodeData.level);
+				if (prompt != null) {
+					nodeData.level = level;
+					console.log(nodeData.level);
+					callback(nodeData);
+					network.setData(data);
+					network.redraw();
+				}
 			}
 		},
-		*/
 		nodes: {
 			font: {
 			  size: 36, // px
