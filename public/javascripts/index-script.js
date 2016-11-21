@@ -11,106 +11,117 @@ $(function(){
 
 	// TODO: uncomment to show modal intro again (hidden for testing)
 	// $('.bs-example-modal-lg').modal('show');
-	
-	var nodes = new vis.DataSet([
-		{id: 1, label: 'Node 1', level: 1},
-		{id: 2, label: 'Node 2', level: 2},
-		{id: 3, label: 'Node 3', level: 3},
-		{id: 4, label: 'Node 4', level: 4},
-		{id: 5, label: 'Node 5', level: 4}
-	]);
+	var network;
+	var data;
+	var nodes;
+	var edges;
+	var container;
+	var options;
 
-	// create an array with edges
-	var edges = new vis.DataSet([
-		{from: 1, to: 3},
-		{from: 1, to: 2},
-		{from: 2, to: 4},
-		{from: 2, to: 5}
-	]);
+	function initNetwork(){
+		nodes = new vis.DataSet([
+			{id: 1, label: 'Node 1', level: 1},
+			{id: 2, label: 'Node 2', level: 2},
+			{id: 3, label: 'Node 3', level: 3},
+			{id: 4, label: 'Node 4', level: 4},
+			{id: 5, label: 'Node 5', level: 4}
+		]);
 
-	// create a network
-	var container = document.getElementById('mynetwork');
+		// create an array with edges
+		edges = new vis.DataSet([
+			{from: 1, to: 3},
+			{from: 1, to: 2},
+			{from: 2, to: 4},
+			{from: 2, to: 5}
+		]);
 
-	// provide the data in the vis format
-	var data = {
-		nodes: nodes,
-		edges: edges
-	};
+		// create a network
+		container = document.getElementById('mynetwork');
 
-	var options = {
-		edges: {
-			arrows: {
-				to: {
-					enabled: true,
-					scaleFactor: 0.5
+		// provide the data in the vis format
+		data = {
+			nodes: nodes,
+			edges: edges
+		};
+
+		options = {
+			edges: {
+				arrows: {
+					to: {
+						enabled: true,
+						scaleFactor: 0.5
+					}
 				}
-			}
-		},
-        groups: {
-			useDefaultGroups: false,
-			/*
-            Sophomore: {
-                color: 'green'
-            },
-            Junior: {
-                color: 'yellow'
-            },
-            Senior: {
-				color: 'red'
 			},
-            NoStanding: {
-                color: 'blue'
-            }
-			*/
-        },
-		layout: {
-			randomSeed: undefined,
-			improvedLayout:true,
-			hierarchical: {
-				enabled:true,
-				levelSeparation: 420,
-				nodeSpacing: 100,
-				treeSpacing: 200,
-				blockShifting: true,
-				edgeMinimization: true,
-				parentCentralization: false,
-				direction: 'LR',        // UD, DU, LR, RL
-				sortMethod: 'directed'   // hubsize, directed
-			}
-		},
-		manipulation: {
-			enabled: true,
-			addNode: function(nodeData,callback) {
-			  nodeData.label = 'hello world';
-			  callback(nodeData);
+					groups: {
+				useDefaultGroups: false,
+				/*
+							Sophomore: {
+									color: 'green'
+							},
+							Junior: {
+									color: 'yellow'
+							},
+							Senior: {
+					color: 'red'
+				},
+							NoStanding: {
+									color: 'blue'
+							}
+				*/
+					},
+			layout: {
+				randomSeed: undefined,
+				improvedLayout:true,
+				hierarchical: {
+					enabled:true,
+					levelSeparation: 420,
+					nodeSpacing: 100,
+					treeSpacing: 200,
+					blockShifting: true,
+					edgeMinimization: true,
+					parentCentralization: false,
+					direction: 'LR',        // UD, DU, LR, RL
+					sortMethod: 'directed'   // hubsize, directed
+				}
 			},
-			editNode: function(nodeData,callback) {
-				var level = prompt("Current node level is " + nodeData.level + ". Enter a new level: ", nodeData.level);
-				if (prompt != null) {
-					nodeData.level = level;
-					console.log(nodeData.level);
+			manipulation: {
+				enabled: true,
+				addNode: function(nodeData,callback) {
+					nodeData.label = 'hello world';
+					nodeData.level = 1;
 					callback(nodeData);
-					network.setData(data);
-					network.redraw();
+				},
+				editNode: function(nodeData,callback) {
+					var level = prompt("Current node level is " + nodeData.level + ". Enter a new level: ", nodeData.level);
+					if (prompt != null) {
+						nodeData.level = level;
+						console.log(nodeData.level);
+						callback(nodeData);
+						network.setData(data);
+						network.redraw();
+					}
+				}
+			},
+			nodes: {
+				font: {
+					size: 36, // px
+				},
+			},
+			physics: {
+				enabled: false,
+				hierarchicalRepulsion: {
+					nodeDistance: 35
 				}
 			}
-		},
-		nodes: {
-			font: {
-			  size: 36, // px
-			},
-		},
-		physics: {
-			enabled: false,
-			hierarchicalRepulsion: {
-				nodeDistance: 35
-			}
-		}
-	};
+		};
 
-	// initialize your network!
-	var network = new vis.Network(container, data, options);
-	//network.setOptions(options);
+		// initialize your network!
+		network = new vis.Network(container, data, options);
+		//network.setOptions(options);
+	}
+
+	initNetwork();
 
 	// ** LOAD PLAN **
 	$(".loadPlan-modal-md").on("hidden.bs.modal", function () {
@@ -298,11 +309,18 @@ $(function(){
 		document.getElementById('loginPass').value = '';
 	});
 
+	$('#newBtn').click(function(){
+		initNetwork();
+		network.redraw();
+	});
+
 	$('#logoutBtn').click(function(){
 		$.post('/logout', function(resp){
 			if(resp == 'OK'){
 				document.getElementById('logoutBtn').setAttribute('style', 'display: none;');
 				document.getElementById('loginBtn').setAttribute('style', '');
+				initNetwork();
+				network.redraw();
 				loggedIn = false;
 			} else {
 				$('.logout-modal').modal('show');
