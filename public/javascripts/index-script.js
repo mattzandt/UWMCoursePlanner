@@ -185,6 +185,10 @@ $(function(){
 			var key = re_result[1];
 			console.log('key: ' + key);
 			// get major data from DB
+
+//*********************************************************** THIS CODE IS NO LONGER VALID*************
+// using old /requiredCourses request, needs to use /curriculum and specify a major key
+
 			$.get('/requiredCourses', function(resp){
 				console.log(resp['majors'][key]);
 				requiredCoursesObj = resp['majors'][key];
@@ -194,6 +198,8 @@ $(function(){
 				console.log(requiredCoursesObj.core);
 				console.log(coursesObj);
 				requiredCoursesObj.core.forEach(function(item, index, array) {
+
+// *******************************************************************************************************
 					console.log(item);
 					//nodeArray.push({id: item, label: item});
 					console.log(coursesObj[item]);

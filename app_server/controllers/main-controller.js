@@ -40,17 +40,23 @@ module.exports.minors = function(req, res){
   });
 };
 
-/* GET list of required courses */
-module.exports.requiredCourses = function(req, res){
-  firebaseRef.child('requiredCourses').once('value', function(snapshot){
-    res.json(snapshot.val());
+/* GET curriculum for specific major */
+module.exports.curriculum = function(req, res){
+  firebaseRef.child('curriculum').child(req.query.major).once('value', function(snapshot){
+    if (snapshot.val() == null){
+      res.sendStatus(204);
+    }else{
+      res.json(snapshot.val());
+    }
   }, function(err){
     console.log(err);
+    res.sendStatus(500);
   });
 };
 
 /* GET list of courses */
 module.exports.courses = function(req, res){
+  console.log(req.query.major);
   firebaseRef.child('courses').once('value', function(snapshot){
     res.json(snapshot.val());
   }, function(err){
@@ -144,5 +150,19 @@ module.exports.getPlan = function(req, res){
         res.json(snap.val());
       });
     }
+  });
+}
+
+//GET default plan for majors
+module.exports.defaultPlan = function(req, res){
+  firebaseRef.child('defaultPlans').child(req.query.major).once('value', function(snap){
+    if (snap.val() == null){
+      res.sendStatus(204);
+    }else{
+      res.json(snap.val());
+    }
+  }, function(error){
+    console.log(error);
+    res.sendStatus(500);
   });
 }

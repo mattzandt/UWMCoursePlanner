@@ -12,7 +12,7 @@ router.get('/majors', ctrlMain.majors);
 router.get('/minors', ctrlMain.minors);
 
 /* GET list of required courses */
-router.get('/requiredCourses', ctrlMain.requiredCourses);
+router.get('/curriculum', ctrlMain.curriculum);
 
 /* GET list of courses */
 router.get('/courses', ctrlMain.courses);
@@ -34,5 +34,8 @@ router.get('/planNames', ctrlMain.planNames);
 
 //GET plan
 router.get('/getPlan', ctrlMain.getPlan);
+
+//GET default plan for specified major
+router.get('/defaultPlan', ctrlMain.defaultPlan);
 
 module.exports = router; // expose router constructor?
