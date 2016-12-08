@@ -54,13 +54,18 @@ module.exports.curriculum = function(req, res){
   });
 };
 
-/* GET list of courses */
-module.exports.courses = function(req, res){
-  console.log(req.query.major);
-  firebaseRef.child('courses').once('value', function(snapshot){
-    res.json(snapshot.val());
+/* GET details of a specific course */
+module.exports.course = function(req, res){
+  console.log(req.query.key);
+  firebaseRef.child('courses').child(req.query.key).once('value', function(snapshot){
+    if(snapshot.val() == null){
+      res.sendStatus(204);
+    }else{
+      res.json(snapshot.val());
+    }
   }, function(err){
     console.log(err);
+    res.sendStatus(500);
   });
 };
 

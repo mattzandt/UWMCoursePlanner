@@ -11,11 +11,11 @@ router.get('/majors', ctrlMain.majors);
 /* GET list of minors */
 router.get('/minors', ctrlMain.minors);
 
-/* GET list of required courses */
+/* GET curriculum */
 router.get('/curriculum', ctrlMain.curriculum);
 
-/* GET list of courses */
-router.get('/courses', ctrlMain.courses);
+/* GET details for specific course */
+router.get('/course', ctrlMain.course);
 
 // POST login
 router.post('/login', ctrlMain.login);
@@ -37,5 +37,8 @@ router.get('/getPlan', ctrlMain.getPlan);
 
 //GET default plan for specified major
 router.get('/defaultPlan', ctrlMain.defaultPlan);
+
+//POST share plan to another user
+//router.post('/sharePlan', ctrlMain.sharePlan);
 
 module.exports = router; // expose router constructor?
