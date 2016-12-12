@@ -72,6 +72,18 @@ module.exports.course = function(req, res){
 // POST login
 module.exports.login = function(req, res){
   firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.pass).then(function(){
+    var exists = false;
+    firebaseRef.child('users').once('value', function(snapshot){
+      snapshot.forEach(function (snap){
+        if (snap.val() == req.body.email) {
+          exists = true;
+        }
+      });
+      if(exists == false){
+        var uid = firebase.auth().currentUser.uid;
+        firebaseRef.child('users').child(uid).set(req.body.email);
+      }
+    });
     res.sendStatus(200);
   }, function(error){
     res.send(error.message);
@@ -169,5 +181,30 @@ module.exports.defaultPlan = function(req, res){
   }, function(error){
     console.log(error);
     res.sendStatus(500);
+  });
+}
+
+module.exports.sharePlan = function(req, res){
+  var uid;
+  console.log(req.body.email);
+  firebase.auth().fetchProvidersForEmail(req.body.email).then(function(result){
+    if(result.length == 0){
+      res.sendStatus(204);
+    }else{
+      console.log('here3');
+      firebaseRef.child('users').once('value', function(snap){
+        console.log('here1');
+        snap.forEach(function (snap){
+          console.log(snap.val());
+          if (snap.val() == req.body.email) {
+            firebaseRef.child('savedPlans').child(snap.key).child(req.body.planName).update({'nodes' : req.body.nodes, 'edges' : req.body.edges});
+            firebaseRef.child('savedPlans').child(snap.key).child('planNames').child('sharedNames').push(req.body.planName);
+          }
+        });
+      });
+      res.sendStatus(200);
+    }
+  }, function(error){
+    res.sendStatus(204);
   });
 }

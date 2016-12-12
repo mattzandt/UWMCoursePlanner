@@ -29,7 +29,7 @@
 								<li><a id="loadBtn" href="#">Open plan...</a></li>
 								<li><a id="saveBtn" href="#">Save plan...</a></li>
 								<li class="divider"></li>
-								<li><a href="#">Export plan...</a></li>
+								<li><a id="shareBtn" href="#">Share plan...</a></li>
 							</ul>
 						</li>
 					</ul>
@@ -146,6 +146,32 @@
         </div>
       </div>
     </div>
+
+
+
+
+    <div class="modal fade sharePlan-modal" id="sharePlan-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          </div>
+            <div class="loginmodal-container">
+              <h1>Enter the email address of a user to share your plan with:</h1><br>
+              <h5 id="noUser" style="display:none;">User does not exist!</h5><br>
+              <h5 id="noPlanName" style="display:none;">Please enter a name for your plan!</h5><br>
+              <form>
+                <input id="shareEmailInput" type="text" placeholder="Email">
+                <input id="shareNameInput" type="text" placeholder="Plan Name">
+                <input id="shareModalBtn" type="submit" class="savePlan savePlan-submit" value="Share">
+              </form>
+            </div>
+        </div>
+      </div>
+    </div>
+
+
+
 
     <div class="modal fade logout-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display:none;">
       <div class="modal-dialog">

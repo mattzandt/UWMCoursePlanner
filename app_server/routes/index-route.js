@@ -39,6 +39,6 @@ router.get('/getPlan', ctrlMain.getPlan);
 router.get('/defaultPlan', ctrlMain.defaultPlan);
 
 //POST share plan to another user
-//router.post('/sharePlan', ctrlMain.sharePlan);
+router.post('/sharePlan', ctrlMain.sharePlan);
 
 module.exports = router; // expose router constructor?

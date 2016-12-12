@@ -136,23 +136,47 @@ $(function(){
 			else{
 				var list = document.getElementById('loadPlan-list');
 				for(var key in data){
-					var element = document.createElement('button');
-					element.setAttribute("class", "btn btn-primary btn-major center-block");
-					element.setAttribute("type", "button");
-					element.style.margin = "5px";
-					element.id = key;
-					element.innerText = data[key];
-					element.addEventListener('click', function(){
-						$.get('/getPlan', {planName : this.innerText}, function(data, textStatus, jqXHR){
-							var loadedData = {
-								nodes : $.map($.parseJSON(data.nodes)._data, function(el) { return el }),
-								edges : $.map($.parseJSON(data.edges)._data, function(el) { return el })
-							}
-							network = new vis.Network(container, loadedData, options);
-							$(".loadPlan-modal-md").modal('hide');
+					if(key == 'sharedNames'){
+						for(var sharedKey in data[key]){
+							var element = document.createElement('button');
+							element.setAttribute("class", "btn btn-primary btn-major center-block");
+							element.setAttribute("type", "button");
+							element.style.margin = "5px";
+							element.id = sharedKey;
+							console.log(key);
+							console.log(sharedKey);
+							element.innerText = data[key][sharedKey] + " (Shared with you)";
+							element.addEventListener('click', function(){
+								$.get('/getPlan', {planName : data[key][sharedKey]}, function(data, textStatus, jqXHR){
+									var loadedData = {
+										nodes : $.map($.parseJSON(data.nodes)._data, function(el) { return el }),
+										edges : $.map($.parseJSON(data.edges)._data, function(el) { return el })
+									}
+									network = new vis.Network(container, loadedData, options);
+									$(".loadPlan-modal-md").modal('hide');
+								});
+							});
+							list.appendChild(element);
+						}
+					}else{
+						var element = document.createElement('button');
+						element.setAttribute("class", "btn btn-primary btn-major center-block");
+						element.setAttribute("type", "button");
+						element.style.margin = "5px";
+						element.id = key;
+						element.innerText = data[key];
+						element.addEventListener('click', function(){
+							$.get('/getPlan', {planName : this.innerText}, function(data, textStatus, jqXHR){
+								var loadedData = {
+									nodes : $.map($.parseJSON(data.nodes)._data, function(el) { return el }),
+									edges : $.map($.parseJSON(data.edges)._data, function(el) { return el })
+								}
+								network = new vis.Network(container, loadedData, options);
+								$(".loadPlan-modal-md").modal('hide');
+							});
 						});
-					});
-					list.appendChild(element);
+						list.appendChild(element);
+					}
 				}
 			}
 		});
@@ -257,6 +281,50 @@ $(function(){
 	$(".major-minor-modal-md").on("hidden.bs.modal", function () {
     document.getElementById('major-minor-list').innerHTML = '';
 	});
+
+
+
+	// ***SHARE PLAN***
+	$('#shareBtn').click(function(){
+		if(loggedIn == true){
+			$('.sharePlan-modal').modal('show');
+		}else $('.login-modal').modal('show');
+	});
+
+	$(".sharePlan-modal").on("hidden.bs.modal", function(){
+		document.getElementById('noUser').setAttribute('style', 'display: none;');
+		document.getElementById('noPlanName').setAttribute('style', 'display: none;');
+		document.getElementById('shareEmailInput').value = '';
+		document.getElementById('shareNameInput').value = '';
+	});
+
+	$('#shareModalBtn').click(function(){
+		document.getElementById('noUser').setAttribute('style', 'display: none;');
+		document.getElementById('noPlanName').setAttribute('style', 'display: none;');
+		if(document.getElementById('shareEmailInput').value == ''){
+			document.getElementById('noUser').setAttribute('style', 'color:red;');
+		}else if(document.getElementById('shareNameInput').value == ''){
+			document.getElementById('noPlanName').setAttribute('style', 'color:red;');
+		}else{
+		//	$('.savePlan-modal').modal('hide');
+			$.post('/sharePlan', {planName : document.getElementById('shareNameInput').value, email: document.getElementById('shareEmailInput').value, nodes: JSON.stringify(nodes), edges: JSON.stringify(edges)}, function(data, textStatus, jqXHR){
+				if (textStatus == 'success'){
+					$('.sharePlan-modal').modal('hide');
+					$("#successSave").alert();
+					$("#successSave").fadeTo(2000, 500).slideUp(500, function(){
+						$("#successSave").slideUp(500);
+					});
+					console.log('successful share');
+				}else if (textStatus == 'nocontent'){
+					console.log('failed share: ' + textStatus);
+					document.getElementById('noUser').setAttribute('style', 'color:red;');
+				}
+			});
+		}
+	});
+
+
+
 
 	// ***SAVE PLAN***
 	$('#saveBtn').click(function(){
