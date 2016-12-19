@@ -257,10 +257,13 @@ $(function() {
 		$('#editCourseError').css("display", "none");
 		// validate input level
 		var userLevel = parseInt($('#editCourseLevel').val());
+		console.log("User level " + userLevel);
 		var completed = $('#completedCheckbox').prop("checked");
 		if (userLevel < 1 || userLevel > 12) {
 			$('#editCourseError').text('Semester number must be between 1 and 12 (inclusive)! Please try again.').css("display", "inline").css("color", "red");
 		} else {
+			var cn = getCourseNodeFromPlan(curSelNode);
+			userLevel = cn.level;
 			editCourseNode(curSelNode, userLevel, completed);
 		}
 	});
