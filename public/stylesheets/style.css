@@ -19,6 +19,28 @@ html, body {
 	border: 1px solid lightgray;
 }
 
+.modal-dialog {
+  top: 10%;
+}
+
+ul.ui-autocomplete {
+    z-index: 1100;
+}
+
+#log {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 0px 15px 0px 0px !important;
+}
+
+#log ul {
+  padding-left: 20px;
+}
+
+#log li {
+  font-size: 1.5rem;
+}
+
 /****** LOGIN MODAL ******/
 .loginmodal-container {
   padding: 30px;
