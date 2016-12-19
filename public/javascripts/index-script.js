@@ -262,8 +262,10 @@ $(function() {
 		if (userLevel < 1 || userLevel > 12) {
 			$('#editCourseError').text('Semester number must be between 1 and 12 (inclusive)! Please try again.').css("display", "inline").css("color", "red");
 		} else {
-			var cn = getCourseNodeFromPlan(curSelNode);
-			userLevel = cn.level;
+			if (isNaN(userLevel)) {
+				var cn = getCourseNodeFromPlan(curSelNode);
+				userLevel = cn.level;
+			}
 			editCourseNode(curSelNode, userLevel, completed);
 		}
 	});
