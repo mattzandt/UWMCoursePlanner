@@ -116,7 +116,8 @@ module.exports.savePlan = function(req, res){
     console.log('Saving plan named ' + req.body.planName + ' for ' + uid + '...');
     plansRef.child(uid).child(req.body.planName).update({
       'nodes' : req.body.nodes,
-      'edges' : req.body.edges
+      'edges' : req.body.edges,
+	  'model' : req.body.model
     });
     var exists = false;
     plansRef.child(uid).child('planNames').once('value', function(snapshot){
@@ -170,7 +171,7 @@ module.exports.getPlan = function(req, res){
   });
 }
 
-//GET default plan for majors
+// GET default plan for majors
 module.exports.defaultPlan = function(req, res){
   firebaseRef.child('defaultPlans').child(req.query.major).once('value', function(snap){
     if (snap.val() == null){
@@ -184,6 +185,7 @@ module.exports.defaultPlan = function(req, res){
   });
 }
 
+// SHARE plan
 module.exports.sharePlan = function(req, res){
   var uid;
   console.log(req.body.email);
@@ -197,7 +199,10 @@ module.exports.sharePlan = function(req, res){
         snap.forEach(function (snap){
           console.log(snap.val());
           if (snap.val() == req.body.email) {
-            firebaseRef.child('savedPlans').child(snap.key).child(req.body.planName).update({'nodes' : req.body.nodes, 'edges' : req.body.edges});
+            firebaseRef.child('savedPlans').child(snap.key).child(req.body.planName).update({
+				'nodes' : req.body.nodes,
+				'edges' : req.body.edges,
+				'model' : req.body.model});
             firebaseRef.child('savedPlans').child(snap.key).child('planNames').child('sharedNames').push(req.body.planName);
           }
         });

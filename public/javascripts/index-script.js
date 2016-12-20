@@ -302,7 +302,7 @@ $(function() {
 					major: key
 				}, function(resp) {
 					console.log('Resp length: ' + resp.length);
-					createCoursePlanFromJSON(resp);
+					parseDefaultJSON(resp);
 					drawCoursePlan();
 					appendLog('Default computer science plan loaded');
 				});
@@ -347,15 +347,11 @@ $(function() {
 								$.get('/getPlan', {
 									planName: data[key][sharedKey]
 								}, function(data, textStatus, jqXHR) {
-									var loadedData = {
-										nodes: $.map($.parseJSON(data.nodes)._data, function(el) {
-											return el
-										}),
-										edges: $.map($.parseJSON(data.edges)._data, function(el) {
-											return el
-										})
-									}
-									network = new vis.Network(container, loadedData, options);
+									var model = JSON.parse(data.model);
+									console.log("Model: " + model);
+									console.log(model.length);
+									myCoursePlan = parseLoadedJSON(model);
+									drawCoursePlan();	
 									$(".loadPlan-modal-md").modal('hide');
 								});
 							});
@@ -372,15 +368,11 @@ $(function() {
 							$.get('/getPlan', {
 								planName: this.innerText
 							}, function(data, textStatus, jqXHR) {
-								var loadedData = {
-									nodes: $.map($.parseJSON(data.nodes)._data, function(el) {
-										return el
-									}),
-									edges: $.map($.parseJSON(data.edges)._data, function(el) {
-										return el
-									})
-								}
-								network = new vis.Network(container, loadedData, options);
+								var model = JSON.parse(data.model);
+								console.log("Model: " + model);
+								console.log(model.length);
+								myCoursePlan = parseLoadedJSON(model);
+								drawCoursePlan();				
 								$(".loadPlan-modal-md").modal('hide');
 							});
 						});
@@ -419,7 +411,8 @@ $(function() {
 				planName: document.getElementById('shareNameInput').value,
 				email: document.getElementById('shareEmailInput').value,
 				nodes: JSON.stringify(nodes),
-				edges: JSON.stringify(edges)
+				edges: JSON.stringify(edges),
+				model: JSON.stringify(myCoursePlan)
 			}, function(data, textStatus, jqXHR) {
 				if (textStatus == 'success') {
 					$('.sharePlan-modal').modal('hide');
@@ -453,7 +446,8 @@ $(function() {
 			$.post('/savePlan', {
 				planName: document.getElementById('planNameInput').value,
 				nodes: JSON.stringify(nodes),
-				edges: JSON.stringify(edges)
+				edges: JSON.stringify(edges),
+				model: JSON.stringify(myCoursePlan)
 			}, function(resp) {
 				if (resp == 'OK') {
 					$("#successSave").alert();
@@ -564,7 +558,7 @@ $(function() {
 	/********************************************** HELPER METHODS **********************************************/
 
 	// parse default plan JSON and create course plan model
-	function createCoursePlanFromJSON(jsonObj) {
+	function parseDefaultJSON(jsonObj) {
 		console.log('JSON: ' + jsonObj);
 		myCoursePlan = [];
 		var courseObj;
@@ -611,7 +605,24 @@ $(function() {
 		//debugCourseNodeArr(myCoursePlan);
 	}
 
-
+	// parse JSON returned by loading a saved plan, and create an array of CourseNode 
+	function parseLoadedJSON(jsonObj) {
+		var coursePlan = [];
+		var courseNode;
+		if (jsonObj.length > 0) {
+			jsonObj.forEach(function(item, index, array) {
+				courseNode = new CourseNode(item.key, item.title, item.credits);
+				courseNode.prereqs = item.prereqs;
+				courseNode.postreqs = item.postreqs;
+				courseNode.level = item.level;
+				courseNode.completed = item.completed;
+				coursePlan.push(courseNode);
+			});
+		}
+		console.log("Loaded plan:");
+		debugCourseNodeArr(coursePlan);
+		return coursePlan;
+	}
 
 	// draw network using course plan model
 	function drawCoursePlan() {
